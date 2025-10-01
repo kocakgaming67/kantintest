@@ -5,119 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Kantin Sekolah</title>
   <style>
-    /* Background gradasi animasi */
     body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin: 0; padding: 0; height: 100vh;
+      display: flex; justify-content: center; align-items: center;
       font-family: "Poppins", sans-serif;
       background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      background-size: 300% 300%;
-      animation: gradientMove 10s ease infinite;
+      background-size: 300% 300%; animation: gradientMove 10s ease infinite;
     }
-
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    /* Box transparan */
     .login-box {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 40px 30px;
-      width: 320px;
-      text-align: center;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-      animation: fadeIn 1s ease;
+      border-radius: 16px; padding: 40px 30px; width: 340px;
+      text-align: center; backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      display: flex; flex-direction: column; align-items: center;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Logo */
     .login-box img {
-      width: 100px;
-      margin-bottom: 15px;
-      animation: logoPop 1s ease;
+      width: 90px; margin-bottom: 15px;
     }
-
-    @keyframes logoPop {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    h1 { color: white; margin-bottom: 20px; }
+    input, select {
+      width: 100%; padding: 12px; margin: 8px 0;
+      border: none; border-radius: 10px; outline: none;
+      background: rgba(255, 255, 255, 0.2); color: white; font-size: 15px;
+      text-align: center; box-sizing: border-box;
     }
-
-    h1 {
-      color: white;
-      margin: 10px 0 20px;
-      font-size: 28px;
-    }
-
-    /* Input */
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 10px;
-      outline: none;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 15px;
-      text-align: center;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-    }
-
-    input::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-
-    input:focus {
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.03);
-    }
-
-    /* Tombol */
+    input::placeholder { color: rgba(255,255,255,0.7); }
     button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
+      width: 100%; padding: 12px; margin-top: 15px;
       background: linear-gradient(135deg, #007bff, #00d4ff);
-      border: none;
-      border-radius: 10px;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
+      border: none; border-radius: 10px; color: white;
+      cursor: pointer; font-size: 16px; font-weight: bold;
+      transition: transform .2s, box-shadow .2s;
     }
-
-    button:hover {
-      background: linear-gradient(135deg, #0056b3, #0099cc);
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    button:hover { 
+      background: linear-gradient(135deg, #0056b3, #0099cc); 
+      transform: scale(1.05); 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
   </style>
 </head>
 <body>
   <div class="login-box">
-    <!-- Logo sekolah -->
     <img src="logo.png" alt="Logo Sekolah">
-    <h1>Login</h1>
+    <h1>Login Kantin</h1>
     <input type="text" id="nama" placeholder="Masukkan Nama" required>
-    <input type="text" id="kelas" placeholder="Masukkan Kelas" required>
+    <input type="text" id="kelas" placeholder="Masukkan Kelas (khusus siswa)">
+    <select id="role">
+      <option value="siswa">Siswa</option>
+      <option value="staff">Staff Kantin</option>
+    </select>
+    <input type="password" id="password" placeholder="Password Staff (khusus staff)">
     <button onclick="login()">Masuk</button>
   </div>
 
@@ -125,18 +68,32 @@
     function login() {
       const nama = document.getElementById("nama").value.trim();
       const kelas = document.getElementById("kelas").value.trim();
+      const role = document.getElementById("role").value;
+      const password = document.getElementById("password").value;
 
-      if (!nama || !kelas) {
-        alert("Nama dan Kelas harus diisi!");
-        return;
+      if (role === "siswa") {
+        if (!nama || !kelas) {
+          alert("Nama dan Kelas harus diisi untuk siswa!");
+          return;
+        }
       }
 
-      // Simpan data ke localStorage
-      localStorage.setItem("nama", nama);
-      localStorage.setItem("kelas", kelas);
+      if (role === "staff") {
+        if (!nama) {
+          alert("Nama staff harus diisi!");
+          return;
+        }
+        if (password !== "kantin123") {
+          alert("Password staff salah!");
+          return;
+        }
+      }
 
-      // Redirect ke halaman utama
-      window.location.href = "index.html";
+      localStorage.setItem("nama", nama || "Staff");
+      localStorage.setItem("kelas", role === "siswa" ? kelas : "-");
+      localStorage.setItem("role", role);
+
+      window.location.href = "dashboard.html";
     }
   </script>
 </body>
