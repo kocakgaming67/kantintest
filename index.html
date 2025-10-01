@@ -5,18 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kantin Sekolah</title>
   <style>
-    body { background:#121212; color:white; font-family:Arial, sans-serif; margin:0; padding:20px; }
-    h1 { text-align:center; }
-    .menu-item { background:#1e1e1e; padding:15px; margin:10px 0; border-radius:10px; display:flex; justify-content:space-between; align-items:center; }
-    .menu-item button { background:#007bff; border:none; padding:6px 12px; border-radius:8px; color:white; cursor:pointer; font-size:16px; }
-    .menu-item button:hover { background:#0056b3; }
-    #cart-summary { margin-top:20px; background:#1e1e1e; padding:15px; border-radius:10px; }
-    #cart-summary table { width:100%; border-collapse:collapse; margin-bottom:10px; }
-    #cart-summary th, #cart-summary td { padding:8px; text-align:center; border-bottom:1px solid #333; }
-    .center { text-align:center; }
-    .checkout-btn { background:#28a745; border:none; padding:10px 20px; border-radius:8px; color:white; cursor:pointer; font-size:18px; }
-    .checkout-btn:hover { background:#1e7e34; }
-    .menu-img { width:60px; height:60px; border-radius:10px; margin-right:10px; object-fit:cover; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Poppins", sans-serif;
+      color: white;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      background-size: 300% 300%;
+      animation: gradientMove 10s ease infinite;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 34px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .menu-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 15px;
+      margin: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+    }
+    .menu-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+    .menu-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+    .menu-item button {
+      background: linear-gradient(135deg, #007bff, #00d4ff);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .menu-item button:hover {
+      background: linear-gradient(135deg, #0056b3, #0099cc);
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    #cart-summary {
+      margin-top: 30px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #cart-summary h2 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    #cart-summary table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    #cart-summary th, #cart-summary td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .center { text-align: center; }
+    .checkout-btn {
+      background: linear-gradient(135deg, #28a745, #6fdd8c);
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .checkout-btn:hover {
+      background: linear-gradient(135deg, #1e7e34, #4cb96b);
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
   </style>
 </head>
 <body>
@@ -128,7 +221,7 @@
       let pesananText = cart.map(i => `${i.menu} x${i.jumlah}`).join(", ");
       let totalHarga = cart.reduce((acc, i) => acc + i.harga * i.jumlah, 0);
 
-      // Simpan ke localStorage (untuk konfirmasi.html)
+      // simpan ke localStorage untuk konfirmasi.html
       let allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
       allOrders.push({
         id: Date.now(),
@@ -138,7 +231,7 @@
       });
       localStorage.setItem("orders", JSON.stringify(allOrders));
 
-      // Kirim ke Discord sebagai Embed
+      // Kirim ke Discord dengan Embed
       let webhookURL = "https://discord.com/api/webhooks/1419225376974045336/wYucIqsz8O0yIwkEz7wuTJrmsY8edn3BT-lRBc6-9rzlArF9hm1qTFYsaDIj4it9kceU";
       let embed = {
         title: "📢 Pesanan Baru!",
@@ -146,7 +239,7 @@
         fields: [
           { name: "👤 Nama", value: nama, inline: true },
           { name: "🏫 Kelas", value: kelas, inline: true },
-          { name: "🍽 Pesanan", value: pesananText, inline: false },
+          { name: "🍽 Pesanan", value: pesananText || "-", inline: false },
           { name: "💰 Total", value: `Rp${totalHarga.toLocaleString()}`, inline: false }
         ],
         footer: { text: "Kantin Sekolah" },
@@ -159,9 +252,9 @@
         body: JSON.stringify({ embeds: [embed] })
       });
 
+      alert("Pesanan berhasil dikirim!");
       cart = [];
       renderMenu(); updateSummary();
-      alert("Pesanan berhasil dikirim!");
     }
 
     renderMenu();
