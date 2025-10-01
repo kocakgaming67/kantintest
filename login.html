@@ -17,25 +17,59 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
+    /* Box login */
     .login-box {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 16px; padding: 40px 30px; width: 340px;
-      text-align: center; backdrop-filter: blur(12px);
+      border-radius: 20px; padding: 40px 30px; width: 340px;
+      text-align: center; backdrop-filter: blur(14px);
       border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
       display: flex; flex-direction: column; align-items: center;
+      animation: popIn 0.8s ease;
     }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8) translateY(30px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Logo */
     .login-box img {
       width: 90px; margin-bottom: 15px;
+      animation: float 3s ease-in-out infinite;
     }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
     h1 { color: white; margin-bottom: 20px; }
+
+    /* Input & select */
     input, select {
       width: 100%; padding: 12px; margin: 8px 0;
       border: none; border-radius: 10px; outline: none;
       background: rgba(255, 255, 255, 0.2); color: white; font-size: 15px;
       text-align: center; box-sizing: border-box;
+      transition: transform .2s, box-shadow .2s;
     }
     input::placeholder { color: rgba(255,255,255,0.7); }
+    input:focus, select:focus {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+
+    /* Dropdown styling fix */
+    select {
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white; text-align-last: center; cursor: pointer;
+    }
+    option {
+      background: #1a1a1a; color: white;
+    }
+
+    /* Button */
     button {
       width: 100%; padding: 12px; margin-top: 15px;
       background: linear-gradient(135deg, #007bff, #00d4ff);
@@ -45,8 +79,8 @@
     }
     button:hover { 
       background: linear-gradient(135deg, #0056b3, #0099cc); 
-      transform: scale(1.05); 
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      transform: scale(1.07); 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     }
   </style>
 </head>
