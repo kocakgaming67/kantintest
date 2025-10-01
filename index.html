@@ -21,10 +21,28 @@
     }
     h1 {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-size: 34px;
       text-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
+
+    /* Sticky total bar */
+    #total-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
     .menu-item {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
@@ -135,6 +153,13 @@
 </head>
 <body>
   <h1>🍔 Kantin Sekolah</h1>
+
+  <!-- Sticky total bar -->
+  <div id="total-bar">
+    <span>🛒 Total Item: <span id="totalItemsTop">0</span></span>
+    <span>💰 Rp<span id="totalPriceTop">0</span></span>
+  </div>
+
   <div id="menu"></div>
 
   <div id="cart-summary">
@@ -230,6 +255,10 @@
 
       document.getElementById("totalItems").textContent = totalItems;
       document.getElementById("totalPrice").textContent = totalPrice.toLocaleString();
+
+      // update sticky bar
+      document.getElementById("totalItemsTop").textContent = totalItems;
+      document.getElementById("totalPriceTop").textContent = totalPrice.toLocaleString();
     }
 
     async function checkout() {
