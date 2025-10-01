@@ -48,22 +48,43 @@
       object-fit: cover;
       margin-right: 15px;
     }
-    .menu-item button {
+
+    /* Counter container */
+    .counter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .counter button {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: linear-gradient(135deg, #007bff, #00d4ff);
       border: none;
-      padding: 8px 14px;
       border-radius: 50%;
       color: white;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
       transition: all 0.3s ease;
     }
-    .menu-item button:hover {
+
+    .counter button:hover {
       background: linear-gradient(135deg, #0056b3, #0099cc);
       transform: scale(1.1);
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
+
+    .counter span {
+      min-width: 20px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
     #cart-summary {
       margin-top: 30px;
       background: rgba(0, 0, 0, 0.4);
@@ -160,9 +181,9 @@
             <img src="${item.gambar}" alt="${item.nama}" class="menu-img">
             <span>${item.nama} - Rp${item.harga.toLocaleString()}</span>
           </div>
-          <div>
+          <div class="counter">
             <button onclick="updateCart(${index}, -1)">-</button>
-            <span style="margin:0 10px;">${jumlah}</span>
+            <span>${jumlah}</span>
             <button onclick="updateCart(${index}, 1)">+</button>
           </div>
         `;
