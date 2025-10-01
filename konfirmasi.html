@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>📋 Daftar Pesanan</h1>
+  <h1> Daftar Pesanan</h1>
   <div id="orders"></div>
 
   <script>
@@ -22,7 +22,7 @@
       ordersEl.innerHTML = "";
 
       if (orders.length === 0) {
-        ordersEl.innerHTML = "<p class='empty'>Belum ada pesanan 🚫</p>";
+        ordersEl.innerHTML = "<p class='empty'>Belum ada pesanan </p>";
         return;
       }
 
@@ -34,7 +34,7 @@
           <h3>👤 ${order.nama} <small>(Kelas ${order.kelas})</small></h3>
           <p>🍽 ${pesananList}</p>
           <p>💰 Total: Rp${order.total.toLocaleString()}</p>
-          <button class="btn-success" onclick="markDone(${order.id})">✅ Selesai</button>
+          <button class="btn-success" onclick="markDone(${order.id})"> Selesai</button>
         `;
         ordersEl.appendChild(div);
       });
