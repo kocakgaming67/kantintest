@@ -62,11 +62,22 @@
     }
     #success-popup.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-    /* Search box */
+    /* Search bar container */
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
     #searchBox {
-      width: 100%; padding: 10px; border-radius: 10px; border: none; 
-      margin-bottom: 15px; text-align: center; font-size: 15px;
-      background: rgba(255,255,255,0.2); color: white;
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      text-align: center;
+      font-size: 15px;
+      background: rgba(255,255,255,0.2);
+      color: white;
     }
     #searchBox::placeholder { color: rgba(255,255,255,0.7); }
   </style>
@@ -80,7 +91,9 @@
   </div>
 
   <!-- Search menu -->
-  <input type="text" id="searchBox" placeholder="Cari menu...">
+  <div class="search-container">
+    <input type="text" id="searchBox" placeholder="Cari menu...">
+  </div>
 
   <div id="menu"></div>
 
@@ -181,17 +194,46 @@
       let kelas = localStorage.getItem("kelas") || prompt("Masukkan Kelas:");
       localStorage.setItem("nama", nama); localStorage.setItem("kelas", kelas);
 
-      let pesananText = cart.map(i => `${i.menu} x${i.jumlah}`).join(", ");
+      let pesananList = cart.map(i => `- ${i.menu} x${i.jumlah}`).join("\n");
       let totalHarga = cart.reduce((acc, i) => acc + i.harga * i.jumlah, 0);
 
       let allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
       allOrders.push({ id: Date.now(), nama, kelas, pesanan: cart, total: totalHarga });
       localStorage.setItem("orders", JSON.stringify(allOrders));
 
-      let popup = document.getElementById("success-popup");
-      popup.classList.add("show"); setTimeout(() => popup.classList.remove("show"), 2000);
+      // Kirim ke Discord Webhook
+      let webhookURL = "https://discord.com/api/webhooks/1419225376974045336/wYucIqsz8O0yIwkEz7wuTJrmsY8edn3BT-lRBc6-9rzlArF9hm1qTFYsaDIj4it9kceU";
+      let embed = {
+        title: "📢 Pesanan Baru",
+        color: 0x00AAFF,
+        fields: [
+          { name: "👤 Nama", value: nama, inline: true },
+          { name: "🏫 Kelas", value: kelas, inline: true },
+          { name: "🍽️ Pesanan", value: pesananList || "-", inline: false },
+          { name: "💰 Total", value: `Rp${totalHarga.toLocaleString()}`, inline: false }
+        ],
+        footer: { text: "Kantin Sekolah" },
+        timestamp: new Date()
+      };
 
-      cart = []; renderMenu(document.getElementById("searchBox").value); updateSummary();
+      try {
+        await fetch(webhookURL, { 
+          method:"POST", 
+          headers:{ "Content-Type":"application/json" }, 
+          body: JSON.stringify({ embeds:[embed] }) 
+        });
+      } catch(e) {
+        console.warn("Webhook error:", e);
+      }
+
+      // popup sukses
+      let popup = document.getElementById("success-popup");
+      popup.classList.add("show"); 
+      setTimeout(() => popup.classList.remove("show"), 2000);
+
+      cart = []; 
+      renderMenu(document.getElementById("searchBox").value); 
+      updateSummary();
     }
 
     // init
