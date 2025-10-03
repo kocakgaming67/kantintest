@@ -24,7 +24,6 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      padding-bottom: 220px; /* biar ada ruang untuk sticky cart */
     }
 
     /* ====== HEADER ICONS ====== */
@@ -164,59 +163,25 @@
     }
     .counter span { min-width: 20px; text-align: center; font-size: 16px; font-weight: bold; }
 
-    /* ====== CART (sticky style) ====== */
+    /* ====== CART ====== */
     #cart-summary {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      background: rgba(255,255,255,0.08);
-      padding: 20px;
-      border-radius: 15px 15px 0 0;
-      border-top: 1px solid rgba(255,255,255,0.2);
-      backdrop-filter: blur(15px);
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+      margin-top: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(15px);
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
       color: #fff;
-      z-index: 999;
     }
+    #cart-summary h2 { margin-top: 0; text-align: center; font-size: 22px; margin-bottom: 20px; color: #7dd3fc; }
+    #cart-summary table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    #cart-summary th, #cart-summary td { padding: 8px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); }
 
-    #cart-summary h2 {
-      margin-top: 0;
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 15px;
-      color: #7dd3fc;
-    }
-
-    #cart-summary table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 10px;
-    }
-    #cart-summary th, 
-    #cart-summary td {
-      padding: 8px;
-      text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-    }
-
+    .center { text-align: center; }
     .checkout-btn {
       background: linear-gradient(135deg, #43e97b, #38f9d7);
-      border: none;
-      padding: 12px 25px;
-      border-radius: 30px;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(72, 239, 128, 0.4);
+      border: none; padding: 12px 25px; border-radius: 30px;
+      color: white; cursor: pointer; font-size: 16px; font-weight: bold;
+      transition: all 0.3s ease; box-shadow: 0 0 15px rgba(72, 239, 128, 0.4);
     }
-    .checkout-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #4effb8;
-    }
+    .checkout-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px #4effb8; }
 
     /* ====== STATUS ====== */
     .order-status {
@@ -258,24 +223,23 @@
       </div>
 
       <div id="menu"></div>
-    </div>
-  </div>
 
-  <!-- Sticky Cart -->
-  <div id="cart-summary">
-    <h2>🛒 Keranjang</h2>
-    <table id="orderTable">
-      <thead>
-        <tr><th>Menu</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <p>Total Item: <span id="totalItems">0</span></p>
-    <p>Total Harga: Rp<span id="totalPrice">0</span></p>
-    <div class="center">
-      <button class="checkout-btn" onclick="checkout()">Pesan Sekarang</button>
+      <div id="cart-summary">
+        <h2>🛒 Keranjang</h2>
+        <table id="orderTable">
+          <thead>
+            <tr><th>Menu</th><th>Jumlah</th><th>Harga</th><th>Subtotal</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p>Total Item: <span id="totalItems">0</span></p>
+        <p>Total Harga: Rp<span id="totalPrice">0</span></p>
+        <div class="center">
+          <button class="checkout-btn" onclick="checkout()">Pesan Sekarang</button>
+        </div>
+        <div id="last-order-status"></div>
+      </div>
     </div>
-    <div id="last-order-status"></div>
   </div>
 
   <script>
