@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Riwayat Pesanan</title>
+  <title>Antrian Pesanan</title>
   <style>
     body {
       margin: 0; padding: 0; font-family: "Poppins", sans-serif; color: #fff;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      background-size: 300% 300%; animation: gradientMove 15s ease infinite;
+      background: linear-gradient(135deg, #0f2027, #203a43 50%, #2c5364);
+      background-attachment: fixed;
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
     }
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
@@ -16,24 +18,25 @@
       100% { background-position: 0% 50%; }
     }
 
-    h1 { text-align: center; margin-bottom: 20px; color: #7dd3fc; }
+    h1 { text-align: center; margin: 20px 0; color: #7dd3fc; }
 
-    .card {
+    .queue-box {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.2);
       border-radius: 15px;
       padding: 15px; margin: 15px auto;
-      max-width: 500px;
+      max-width: 600px;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 20px rgba(0,255,255,0.1);
       transition: transform 0.3s;
     }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 0 25px rgba(0,255,255,0.3); }
+    .queue-box:hover { transform: translateY(-5px); box-shadow: 0 0 25px rgba(0,255,255,0.3); }
 
-    #user { text-align: center; margin-bottom: 15px; font-size: 18px; }
+    .pending { color: #ffda6a; }
+    .selesai { color: #6fdd8c; }
     .empty { text-align: center; opacity: 0.7; }
 
-    /* ====== SIDEBAR ====== */
+    /* Sidebar */
     .top-left {
       position: fixed; top: 15px; left: 15px; display: flex; gap: 10px; z-index: 1001;
     }
@@ -71,50 +74,47 @@
     <a href="dashboard.html">🏠 Dashboard</a>
     <a href="index.html">📋 Order</a>
     <a href="riwayat.html">📜 Riwayat</a>
-    <a href="index.html#queuePage">🕒 Antrian</a>
+    <a href="antrian.html">🕒 Antrian</a>
   </div>
 
-  <h1>📜 Riwayat Pesanan</h1>
-  <div id="user"></div>
-  <div id="history"></div>
+  <h1>🕒 Antrian Pesanan</h1>
+  <div id="queueList"></div>
 
   <script>
     function toggleSidebar() {
       document.getElementById("sidebar").classList.toggle("show");
     }
 
-    const nama = localStorage.getItem("nama");
-    const kelas = localStorage.getItem("kelas");
-    const userEl = document.getElementById("user");
-    const listEl = document.getElementById("history");
+    function renderQueue() {
+      const queueDiv = document.getElementById("queueList");
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      queueDiv.innerHTML = "";
 
-    if(!nama || !kelas){
-      userEl.innerHTML = "<p>Nama/Kelas belum diisi. Silakan login dulu.</p>";
-      listEl.innerHTML = "";
-    } else {
-      userEl.innerHTML = `👤 ${nama} • Kelas ${kelas}`;
-      const orders = JSON.parse(localStorage.getItem("orders")||"[]")
-        .filter(o => o.nama === nama && o.kelas === kelas)
-        .sort((a,b)=> b.id - a.id);
-
-      if(orders.length===0){
-        listEl.innerHTML = "<p class='empty'>Belum ada riwayat pesanan.</p>";
-      } else {
-        listEl.innerHTML = "";
-        orders.forEach(o=>{
-          const pesananList = o.pesanan.map(i=>`${i.menu} x${i.jumlah}`).join(", ");
-          const d = new Date(o.id);
-          const card = document.createElement("div");
-          card.className = "card";
-          card.innerHTML = `
-            <h3>${d.toLocaleString()}</h3>
-            <p>🍽️ ${pesananList}</p>
-            <p>💰 Total: Rp${o.total.toLocaleString()}</p>
-          `;
-          listEl.appendChild(card);
-        });
+      if (orders.length === 0) {
+        queueDiv.innerHTML = "<p class='empty'>Tidak ada antrian saat ini.</p>";
+        return;
       }
+
+      // Urutkan berdasarkan waktu masuk
+      orders.sort((a,b)=> a.id - b.id);
+
+      orders.forEach((o, idx) => {
+        let pesananList = o.pesanan.map(i=>`${i.menu} x${i.jumlah}`).join(", ");
+        const div = document.createElement("div");
+        div.className = "queue-box";
+        div.innerHTML = `
+          <h3>👤 ${o.nama} • Kelas ${o.kelas}</h3>
+          <p>🍽️ ${pesananList}</p>
+          <p>💰 Total: Rp${o.total.toLocaleString()}</p>
+          <p>Status: <span class="${o.status}">${o.status === "selesai" ? "✅ Selesai" : "⏳ Pending"}</span></p>
+          <p>📌 Posisi antrian: ${idx+1} dari ${orders.length}</p>
+        `;
+        queueDiv.appendChild(div);
+      });
     }
+
+    renderQueue();
+    setInterval(renderQueue, 5000); // auto-refresh tiap 5 detik
   </script>
 </body>
 </html>

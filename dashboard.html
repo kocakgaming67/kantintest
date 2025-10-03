@@ -6,10 +6,11 @@
   <title>Dashboard Kantin</title>
   <style>
     body {
-      margin: 0; padding: 20px;
+      margin: 0; padding: 0;
       font-family: "Poppins", sans-serif; color: white;
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      background-size: 300% 300%; animation: gradientMove 10s ease infinite;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background-size: 300% 300%;
+      animation: gradientMove 15s ease infinite;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       min-height: 100vh;
     }
@@ -18,26 +19,66 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
+    /* Logo */
+    .logo {
+      width: 90px; margin-bottom: 15px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
     h1 { margin-bottom: 10px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     #user { margin-bottom: 30px; font-size: 18px; opacity: 0.9; }
-    .menu { display: flex; flex-direction: column; gap: 15px; width: 220px; }
-    .menu button {
-      padding: 12px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold;
-      cursor: pointer; color: white; background: linear-gradient(135deg, #007bff, #00d4ff);
-      transition: transform .3s, box-shadow .3s;
+
+    /* Menu box */
+    .menu {
+      display: flex; flex-direction: column; gap: 15px; width: 240px;
+      background: rgba(255,255,255,0.05);
+      padding: 25px; border-radius: 20px;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      animation: fadeIn 0.8s ease;
     }
-    .menu button:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-    .logout { background: linear-gradient(135deg, #dc3545, #ff6b6b); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .menu button {
+      padding: 12px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold;
+      cursor: pointer; color: white; background: rgba(255,255,255,0.08);
+      transition: all .3s ease; backdrop-filter: blur(6px);
+      box-shadow: inset 0 0 5px rgba(0,255,255,0.2);
+    }
+    .menu button:hover {
+      background: rgba(0,255,255,0.15);
+      box-shadow: 0 0 15px #00e5ff;
+      transform: scale(1.05);
+    }
+    .logout {
+      background: rgba(255,0,0,0.2);
+      box-shadow: inset 0 0 5px rgba(255,50,50,0.4);
+    }
+    .logout:hover {
+      background: rgba(255,0,0,0.3);
+      box-shadow: 0 0 15px #ff4d4d;
+    }
   </style>
 </head>
 <body>
-  <h1> Dashboard Kantin</h1>
+  <img src="logo.png" alt="Logo Sekolah" class="logo">
+  <h1>Dashboard Kantin</h1>
   <div id="user"></div>
+
   <div class="menu">
-    <button onclick="go('index.html')"> Pesan Makanan</button>
-    <button onclick="go('riwayat.html')"> Riwayat Pesanan</button>
-    <button onclick="go('konfirmasi.html')"> Konfirmasi Pesanan</button>
-    <button class="logout" onclick="logout()">> Logout</button>
+    <button onclick="go('index.html')">🍽️ Pesan Makanan</button>
+    <button onclick="go('riwayat.html')">📜 Riwayat Pesanan</button>
+    <button onclick="go('konfirmasi.html')">✅ Konfirmasi Pesanan</button>
+    <button class="logout" onclick="logout()">🚪 Logout</button>
   </div>
 
   <script>

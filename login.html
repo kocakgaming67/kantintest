@@ -6,11 +6,11 @@
   <title>Login Kantin Sekolah</title>
   <style>
     body {
-      margin: 0; padding: 0; height: 100vh;
-      display: flex; justify-content: center; align-items: center;
+      margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
       font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-      background-size: 300% 300%; animation: gradientMove 10s ease infinite;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background-size: 300% 300%;
+      animation: gradientMove 15s ease infinite;
     }
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
@@ -18,117 +18,131 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Box login */
     .login-box {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 20px; padding: 40px 30px; width: 340px;
-      text-align: center; backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-      display: flex; flex-direction: column; align-items: center;
-      animation: popIn 0.8s ease;
+      text-align: center; box-shadow: 0 0 30px rgba(0,255,255,0.15);
+      animation: fadeIn 1s ease;
     }
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.8) translateY(30px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
+    @keyframes fadeIn { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform: translateY(0);} }
 
-    /* Logo */
+    /* === Logo sekolah dengan idle animation === */
     .login-box img {
       width: 90px; margin-bottom: 15px;
       animation: float 3s ease-in-out infinite;
     }
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
+      0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
 
-    h1 { color: white; margin-bottom: 20px; }
+    .login-box h1 { color: #7dd3fc; margin-bottom: 20px; }
 
-    /* Input & select */
-    input, select {
+    select, input {
       width: 100%; padding: 12px; margin: 8px 0;
       border: none; border-radius: 10px; outline: none;
-      background: rgba(255, 255, 255, 0.2); color: white; font-size: 15px;
+      background: rgba(255,255,255,0.1); color: white; font-size: 15px;
       text-align: center; box-sizing: border-box;
-      transition: transform .2s, box-shadow .2s;
+      backdrop-filter: blur(6px);
+      transition: all 0.2s;
     }
-    input::placeholder { color: rgba(255,255,255,0.7); }
+    input::placeholder { color: rgba(255,255,255,0.6); }
     input:focus, select:focus {
+      box-shadow: 0 0 12px #00e5ff;
       transform: scale(1.05);
-      box-shadow: 0 0 10px rgba(255,255,255,0.6);
     }
-
-    /* Dropdown styling fix */
-    select {
-      appearance: none; -webkit-appearance: none; -moz-appearance: none;
-      background: rgba(255, 255, 255, 0.2);
-      color: white; text-align-last: center; cursor: pointer;
-    }
-    option {
+    option, optgroup {
       background: #1a1a1a; color: white;
     }
+    optgroup {
+      font-weight: bold;
+      color: #7dd3fc;
+    }
 
-    /* Button */
     button {
       width: 100%; padding: 12px; margin-top: 15px;
-      background: linear-gradient(135deg, #007bff, #00d4ff);
+      background: linear-gradient(135deg, #43e97b, #38f9d7);
       border: none; border-radius: 10px; color: white;
       cursor: pointer; font-size: 16px; font-weight: bold;
-      transition: transform .2s, box-shadow .2s;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px rgba(72,239,128,0.4);
     }
-    button:hover { 
-      background: linear-gradient(135deg, #0056b3, #0099cc); 
-      transform: scale(1.07); 
-      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-    }
+    button:hover { transform: scale(1.07); box-shadow: 0 0 20px #4effb8; }
   </style>
 </head>
 <body>
   <div class="login-box">
+    <!-- Logo sekolah -->
     <img src="logo.png" alt="Logo Sekolah">
-    <h1>Login Kantin</h1>
-    <input type="text" id="nama" placeholder="Masukkan Nama" required>
-    <input type="text" id="kelas" placeholder="Masukkan Kelas (khusus siswa)">
-    <select id="role">
+    <h1>Kantin Sekolah</h1>
+
+    <select id="role" onchange="toggleFields()">
       <option value="siswa">Siswa</option>
       <option value="staff">Staff Kantin</option>
     </select>
-    <input type="password" id="password" placeholder="Password Staff (khusus staff)">
+
+    <!-- Untuk siswa -->
+    <select id="kelas">
+      <option value="">-- Pilih Kelas --</option>
+    </select>
+
+    <!-- Untuk staff -->
+    <input type="password" id="password" placeholder="Password Staff (khusus staff)" style="display:none;">
+
     <button onclick="login()">Masuk</button>
   </div>
 
   <script>
-    function login() {
-      const nama = document.getElementById("nama").value.trim();
-      const kelas = document.getElementById("kelas").value.trim();
+    const kelasSelect = document.getElementById("kelas");
+
+    function addGroup(level, hurufList) {
+      const group = document.createElement("optgroup");
+      group.label = "Kelas " + level;
+      hurufList.split("").forEach(huruf => {
+        let opt = document.createElement("option");
+        opt.value = level + huruf;
+        opt.textContent = "Kelas " + level + huruf;
+        group.appendChild(opt);
+      });
+      kelasSelect.appendChild(group);
+    }
+
+    // Tambahkan kelas per tingkat
+    addGroup("10", "ABCDEFGHIJ"); // 10A-10J
+    addGroup("11", "ABCDEFGHIJ"); // 11A-11J
+    addGroup("12", "ABCDEFGHI");  // 12A-12I
+
+    function toggleFields() {
       const role = document.getElementById("role").value;
+      document.getElementById("kelas").style.display = role === "siswa" ? "block" : "none";
+      document.getElementById("password").style.display = role === "staff" ? "block" : "none";
+    }
+
+    function login() {
+      const role = document.getElementById("role").value;
+      const kelas = document.getElementById("kelas").value;
       const password = document.getElementById("password").value;
 
       if (role === "siswa") {
-        if (!nama || !kelas) {
-          alert("Nama dan Kelas harus diisi untuk siswa");
-          return;
-        }
+        if (!kelas) { alert("Pilih kelas terlebih dahulu."); return; }
+        localStorage.setItem("nama", "Siswa");
+        localStorage.setItem("kelas", kelas);
+        localStorage.setItem("role", "siswa");
+        window.location.href = "index.html";
       }
 
       if (role === "staff") {
-        if (!nama) {
-          alert("Nama staff harus diisi!");
-          return;
-        }
-        if (password !== "kantin123") {
-          alert("Password staff salah");
-          return;
-        }
+        if (password !== "kantin123") { alert("Password staff salah"); return; }
+        localStorage.setItem("nama", "Staff");
+        localStorage.setItem("kelas", "-");
+        localStorage.setItem("role", "staff");
+        window.location.href = "dashboard.html";
       }
-
-      localStorage.setItem("nama", nama || "Staff");
-      localStorage.setItem("kelas", role === "siswa" ? kelas : "-");
-      localStorage.setItem("role", role);
-
-      window.location.href = "dashboard.html";
     }
+
+    toggleFields(); // init
   </script>
 </body>
 </html>
