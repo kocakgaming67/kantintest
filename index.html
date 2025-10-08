@@ -360,7 +360,7 @@
     }
 
     async function sendToDiscord(order){
-      const webhookURL="https://discord.com/api/webhooks/your_webhook_here";
+      const webhookURL="https://discord.com/api/webhooks/1425401447608094720/3edFAYa9mnY3pllGJKl9OwFdNTkBXh-jPGCjebk52BQCsP7FT2b40fGItbp4sO_CS_K4";
       const total=order.pesanan.reduce((a,i)=>a+i.harga*i.jumlah,0);
       const list=order.pesanan.map(i=>`• ${i.jumlah}× ${i.menu} Rp${(i.harga*i.jumlah).toLocaleString()}`).join("\n");
 
